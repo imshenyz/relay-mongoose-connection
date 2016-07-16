@@ -31,14 +31,13 @@ export function offsetToCursor(offset) {
 }
 
 /**
- * Accepts a mongodb cursor and connection arguments, and returns a connection
+ * Accepts a mongoose query and connection arguments, and returns a connection
  * object for use in GraphQL. It uses array offsets as pagination, so pagiantion
  * will work only if the data set is satic.
  */
-export default async function connectionFromMongoCursor(inMongoCursor, args = {}, mapper) {
-  const mongodbCursor = inMongoCursor.clone();
+export default async function connectionFromMongooseQuery(mongooseQuery, args = {}, mapper) {
   const { after, before, first, last } = args;
-  const count = await mongodbCursor.count();
+  const count = await mongooseQuery.count();
   const beforeOffset = getOffsetWithDefault(before, count);
   const afterOffset = getOffsetWithDefault(after, -1);
 
@@ -56,11 +55,15 @@ export default async function connectionFromMongoCursor(inMongoCursor, args = {}
   const limit = endOffset - startOffset;
 
   // If supplied slice is too large, trim it down before mapping over it.
-  mongodbCursor.skip(skip);
-  mongodbCursor.limit(limit);
+  mongooseQuery.skip(skip);
+  mongooseQuery.limit(limit);
 
   // Short circuit if limit is 0; in that case, mongodb doesn't limit at all
-  let slice = limit === 0 ? [] : await mongodbCursor.toArray();
+  let slice = [];
+  if (limit > 0) {
+    const docs = await mongooseQuery.find();
+    slice = docs.map(doc => doc.toObject());
+  }
 
   // If we have a mapper function, map it!
   if (typeof mapper === 'function') {

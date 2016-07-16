@@ -1,11 +1,11 @@
 {
-  "name": "relay-mongodb-connection",
-  "version": "1.0.0",
-  "description": "MongoDB connection for Relay",
+  "name": "relay-mongoose-connection",
+  "version": "1.0.1",
+  "description": "Mongoose connection for Relay",
   "main": "lib/index.js",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/mikberg/relay-mongodb-connection.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shenyzore/relay-mongoose-connection.git"
   },
   "scripts": {
     "compile": "mkdir -p lib && babel index.js --out-file lib/index.js",
@@ -17,9 +17,17 @@
   "keywords": [
     "relay",
     "graphql",
-    "mongodb"
+    "mongodb",
+    "mongoose"
   ],
-  "author": "Mikael Berg",
+  "contributors": [
+    {
+      "name": "Mikael Berg"
+    },
+    {
+      "name": "Shenyz"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel": "^5.8.34",
@@ -31,6 +39,6 @@
     "eslint-config-airbnb": "^1.0.0",
     "istanbul": "^0.4.0",
     "mocha": "^2.3.3",
-    "mongodb": "^2.0.48"
+    "mongoose": "^4.5.4"
   }
 }
